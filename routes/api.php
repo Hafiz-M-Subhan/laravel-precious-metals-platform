@@ -5,7 +5,10 @@ declare(strict_types=1);
 use App\Http\Controllers\Api\AssetController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PortfolioController;
+use App\Http\Controllers\Api\PriceAlertController;
 use App\Http\Controllers\Api\SavingsPlanController;
+use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\Api\WatchlistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +23,9 @@ Route::prefix('v1')->group(function () {
     Route::get('/assets', [AssetController::class, 'index']);
     Route::get('/assets/{symbol}', [AssetController::class, 'show']);
     Route::get('/assets/{symbol}/candles', [AssetController::class, 'candles']);
+
+    // ElasticSearch full-text asset search (public — used by search bars)
+    Route::get('/search/assets', [SearchController::class, 'assets']);
 
     /*
     |--------------------------------------------------------------------------
@@ -38,6 +44,17 @@ Route::prefix('v1')->group(function () {
 
         // Portfolio
         Route::get('/portfolio', [PortfolioController::class, 'show']);
+        Route::post('/portfolio/refresh', [PortfolioController::class, 'refresh']);
+
+        // Price alerts
+        Route::get('/price-alerts', [PriceAlertController::class, 'index']);
+        Route::post('/price-alerts', [PriceAlertController::class, 'store']);
+        Route::delete('/price-alerts/{priceAlert}', [PriceAlertController::class, 'destroy']);
+
+        // Watchlist
+        Route::get('/watchlist', [WatchlistController::class, 'index']);
+        Route::post('/watchlist', [WatchlistController::class, 'store']);
+        Route::delete('/watchlist/{asset}', [WatchlistController::class, 'destroy']);
 
     });
 });

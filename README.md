@@ -1,49 +1,60 @@
 # Laravel Precious Metals Platform
 
-> High-traffic Laravel platform for live precious metals trading — WebSocket price feeds to 30k+ concurrent users, Redis-backed queue workers, Filament 3 admin panel, and an event-driven savings plan engine.
+> High-traffic Laravel platform for live precious metals trading — WebSocket price feeds to 30k+ concurrent users, Redis-backed queue workers, ElasticSearch asset search, price alert engine, portfolio P&L tracking, Filament 3 admin panel, and an event-driven DCA savings plan engine.
 
-Built as a direct answer to Kettner's stack: **Laravel · Redis · WebSockets · ElasticSearch · Filament · Docker**.
+Built directly against Kettner's stack: **Laravel · Redis · WebSockets · ElasticSearch · Filament · Docker**.
 
 ---
 
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────────┐
-│                   Vue / Nuxt Frontend                            │
-│   Live Price Ticker · Order Form · Savings Plan Chart           │
-└──────────────┬─────────────────────┬────────────────────────────┘
-               │ REST /api/v1/*       │ WebSocket (Echo + Reverb)
-┌──────────────▼─────────────────────▼────────────────────────────┐
-│                    Laravel 11 Application                        │
-│                                                                  │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐   │
-│  │ AssetCtrl    │  │ OrderCtrl    │  │ SavingsPlanCtrl      │   │
-│  │ (Redis 5s)   │  │ (202 + queue)│  │ (DCA projection)     │   │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘   │
-│                                                                  │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐   │
-│  │ PriceService │  │ OrderService │  │ SavingsPlanService   │   │
-│  │ GBM ticks    │  │ atomic fill  │  │ DCA engine           │   │
-│  │ OHLCV upsert │  │ portfolio    │  │ nextExecutionDate    │   │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘   │
-└──────┬────────────────────┬──────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     Vue / Nuxt Frontend                                 │
+│   Live Ticker · Order Form · DCA Chart · Portfolio Dashboard           │
+└──────────────┬──────────────────────┬──────────────────────────────────┘
+               │ REST /api/v1/*        │ WebSocket (Echo + Reverb)
+┌──────────────▼──────────────────────▼──────────────────────────────────┐
+│                       Laravel 11 Application                            │
+│                                                                         │
+│  ┌─────────────┐  ┌─────────────┐  ┌──────────────┐  ┌─────────────┐  │
+│  │ AssetCtrl   │  │ OrderCtrl   │  │ SavingsPlan  │  │ PortfolioCtrl│  │
+│  │ Redis 5s    │  │ 202 + queue │  │ DCA + chart  │  │ P&L summary  │  │
+│  └─────────────┘  └─────────────┘  └──────────────┘  └─────────────┘  │
+│                                                                         │
+│  ┌─────────────┐  ┌─────────────┐  ┌──────────────┐  ┌─────────────┐  │
+│  │ PriceAlertCtrl│ │ WatchlistCtrl│ │ SearchCtrl  │  │ Policies    │  │
+│  │ CRUD + fire │  │ per-user    │  │ ES fuzziness │  │ ownership   │  │
+│  └─────────────┘  └─────────────┘  └──────────────┘  └─────────────┘  │
+└──────┬────────────────────┬─────────────────────────────────────────────┘
        │                    │
-┌──────▼──────┐     ┌───────▼──────────────────────────────────────┐
-│   Redis     │     │  Queue Workers (Horizon)                     │
-│  cache      │     │  ┌──────────────┐  ┌─────────────────────┐  │
-│  pub/sub    │     │  │ ProcessOrder │  │ ExecuteSavingsPlan  │  │
-│  queues     │     │  │ 3 retries    │  │ unique per day      │  │
-└──────┬──────┘     │  │ ShouldBeUniq │  │ DCA buy + portfolio │  │
-       │            │  └──────────────┘  └─────────────────────┘  │
-       │            └─────────────────────────────────────────────┘
+┌──────▼──────┐     ┌───────▼──────────────────────────────────────────────┐
+│   Redis     │     │  Queue Workers — Horizon (4 named queues)            │
+│  5s prices  │     │  ┌─────────────┐ ┌─────────────┐ ┌────────────────┐ │
+│  60s candles│     │  │ ProcessOrder│ │ExecuteDCA   │ │CheckPriceAlerts│ │
+│  30s stats  │     │  │ ShouldUniq  │ │unique/day   │ │everyMinute     │ │
+│  queues     │     │  │ 3 retries   │ │fills+portf. │ │Redis price read│ │
+└──────┬──────┘     │  └─────────────┘ └─────────────┘ └────────────────┘ │
+       │            │  ┌─────────────┐ ┌──────────────────────────────────┐│
+       │            │  │BroadcastMkt │ │  Notifications (mail + database)  ││
+       │            │  │every 30s    │ │  OrderFulfilled · DCAExecuted     ││
+       │            │  │gainers/losers│ │  PriceAlertTriggered             ││
+       │            │  └─────────────┘ └──────────────────────────────────┘│
+       │            └──────────────────────────────────────────────────────┘
        │
-┌──────▼──────────────────────────────────────────────────────────┐
-│  Laravel Reverb (WebSocket Server)                              │
-│  Channel: prices.XAU  (public  — 30k+ subscribers)             │
-│  Channel: live-event  (presence — viewer count)                 │
-│  Channel: user.{id}   (private — order fills, plan executions)  │
-└─────────────────────────────────────────────────────────────────┘
+┌──────▼───────────────────────────────────────────────────────────────────┐
+│  Laravel Reverb (WebSocket Server)                                       │
+│  prices.{symbol}   — public   — live tick data (30k+ subscribers)        │
+│  market-summary    — public   — gainers/losers every 30s                 │
+│  live-event        — presence — viewer count                             │
+│  user.{id}         — private  — fills, DCA executions, price alert fires │
+└──────────────────────────────────────────────────────────────────────────┘
+       │
+┌──────▼─────────────────┐     ┌─────────────────────────────────────────┐
+│  ElasticSearch 8       │     │  MySQL 8                                │
+│  symbol^3 / name^2     │     │  Composite indexes, soft deletes        │
+│  fuzzy + currency filter│     │  OHLCV upsert unique constraint        │
+└────────────────────────┘     └─────────────────────────────────────────┘
 ```
 
 ---
@@ -53,66 +64,122 @@ Built as a direct answer to Kettner's stack: **Laravel · Redis · WebSockets ·
 ### 1. Real-Time Price Broadcasting at Scale
 `app/Events/PriceUpdated.php` — `app/Services/PriceService.php`
 
-- **Laravel Reverb** WebSocket server broadcasts live gold/silver/platinum/palladium ticks to public channels
-- `broadcastWhen()` gate suppresses ticks with < 0.001% movement, cutting queue noise by ~80%
-- Presence channel (`live-event`) carries viewer count for the live event page — same pattern as Kettner's 30k simultaneous viewers
-- Payload is hand-trimmed to 7 fields to minimize per-message bytes at scale
-
-```php
-// PriceUpdated::broadcastWith() — lean payload for 30k concurrent clients
-return [
-    'symbol'     => $this->asset->symbol,
-    'spot'       => (float) $this->asset->spot_price,
-    'bid'        => (float) $this->asset->bid_price,
-    'ask'        => (float) $this->asset->ask_price,
-    'change_pct' => (float) $this->asset->daily_change_pct,
-    'direction'  => $this->asset->spot_price > $this->previousPrice ? 'up' : 'down',
-    'ts'         => now()->toIso8601String(),
-];
-```
+- **Laravel Reverb** broadcasts live XAU/XAG/XPT/XPD ticks to public channels
+- `broadcastWhen()` gate suppresses ticks with < 0.001% movement — cuts queue noise by ~80%
+- Presence channel (`live-event`) carries viewer count for the live page
+- Payload trimmed to 7 fields to minimize per-message bytes at 30k scale
+- `MarketSummaryUpdated` broadcasts overall gainers/losers/top-mover every 30 seconds
 
 ### 2. Event-Driven Order Processing
 `app/Jobs/ProcessOrder.php` — `app/Services/OrderService.php`
 
-- Orders return **202 Accepted** immediately; filling happens in a dedicated `orders` queue
-- `ShouldBeUnique` prevents double-fill if a job retries after partial failure
-- `DB::transaction()` wraps price re-fetch + status update + portfolio apply atomically (prevents stale fill prices)
-- Retry strategy: 3 attempts, exponential backoff `[5s, 30s, 120s]`
-- On fill, broadcasts `OrderFulfilled` to the user's private channel — no polling needed
+- Returns **202 Accepted** immediately; fill happens in the dedicated `orders` Horizon queue
+- `ShouldBeUnique` on order ID prevents double-fill on retry
+- `DB::transaction()` wraps price re-fetch + fill + portfolio apply atomically — no stale fill prices
+- Retry: 3 attempts, backoff `[5s, 30s, 120s]`
+- On fill: broadcasts `OrderFulfilled` to private channel **and** sends a mail + database notification
 
-### 3. Savings Plan Engine (DCA)
+### 3. Portfolio Tracking with Real P&L
+`app/Services/PortfolioService.php` — `app/Models/PortfolioEntry.php`
+
+- Weighted average cost basis recalculated on every buy
+- Realized P&L tracked on sell: `(sale_price − cost_basis) × qty` — stored per entry
+- `GET /api/v1/portfolio` returns live unrealized P&L using current spot prices, allocation %, total cost vs total value
+- `POST /api/v1/portfolio/refresh` force-recalculates all entries against live prices
+
+### 4. Price Alert Engine
+`app/Jobs/CheckPriceAlerts.php` — `app/Events/PriceAlertFired.php`
+
+- Users set `above` / `below` threshold alerts via `POST /api/v1/price-alerts`
+- `CheckPriceAlerts` runs every minute (`ShouldBeUnique`, 55s lock) — reads price from Redis 5s cache for accuracy
+- On trigger: marks alert inactive, sends `PriceAlertTriggered` notification (mail + database), broadcasts `price_alert.fired` to private WebSocket channel
+- `lazyById(100)` chunking avoids full table scans when many alerts exist
+
+### 5. DCA Savings Plan Engine
 `app/Services/SavingsPlanService.php` — `app/Jobs/ExecuteSavingsPlan.php`
 
-- Scheduler runs `savings-plans:schedule` every minute; chunks plans with `chunkById(200)` — no full table scans
-- Unique job key encodes `plan_id + date` to prevent double-execution across restarts
-- `projectDcaGrowth()` models future portfolio value using compounding — feeds the frontend projection chart
-- Supports monthly / biweekly / weekly frequencies with `addMonthNoOverflow()` for correct end-of-month handling
+- Scheduler runs `savings-plans:schedule` every minute with `chunkById(200)`
+- Unique key `savings_plan_{id}_{date}` prevents double-execution across restarts
+- `projectDcaGrowth(months, annualGrowth)` models future value using compound monthly growth
+- `addMonthNoOverflow()` prevents February overflow (day 31 → day 28)
+- On execution: sends `SavingsPlanExecuted` notification showing avg cost basis, total invested, next execution date
 
-### 4. Redis Caching Strategy
+### 6. ElasticSearch Asset Search
+`app/Services/AssetSearchService.php` — `app/Http/Controllers/Api/SearchController.php`
+
+- `GET /api/v1/search/assets?q=gold&currency=USD` — fuzzy multi-field search
+- Field boost: `symbol^3 > name^2 > unit > currency` — "XAU" always beats "gold" for exact matches
+- `fuzziness: AUTO` handles typos ("platnum" → "platinum")
+- ES index kept in sync: `indexAsset()` on create, `updatePrice()` on tick with silent failure (non-critical path)
+- `createIndex()` checks existence before creating — safe to call on every deploy
+
+### 7. Redis Caching Strategy
 `app/Services/PriceService.php` — `app/Http/Controllers/Api/AssetController.php`
 
 | Key pattern | TTL | Purpose |
 |---|---|---|
-| `asset:price:{symbol}` | 5s | Latest tick for API responses |
-| `assets:active` | 5s | Full asset list (cuts 95% of DB load on burst) |
+| `price:{symbol}` | 5s | Latest tick for alert checks + API responses |
+| `assets:active` | 5s | Full asset list (cuts ~95% DB load on burst) |
 | `candles:{id}:{res}:{from}:{to}` | 60s | OHLCV chart data |
 | `daily_open:{id}` | 3600s | Daily open for change% calculation |
-| `admin:order_stats` | 30s | Filament dashboard stats widget |
+| `admin:order_stats` | 30s | Filament stats widget |
+| `admin:platform_stats` | 30s | Active alerts, DCA plans, volume |
 
-### 5. Filament 3 Admin Panel
-`app/Filament/Resources/`
+### 8. Filament 3 Admin Panel
+`app/Filament/Resources/` — `app/Filament/Widgets/`
 
-- `AssetResource` — live price table with `.poll('5s')` auto-refresh; color-coded change% badges
-- `OrderResource` — full order book with `OrderStatsOverview` widget (filled today, volume, pending queue, failed)
-- `SavingsPlanResource` — plan management with next-execution scheduling view
+- `AssetResource` — live price table, `.poll('5s')`, color-coded change% badges
+- `OrderResource` — full order book + `OrderStatsOverview` widget (filled, volume, pending, failed)
+- `SavingsPlanResource` — DCA plan management with next-execution dates
+- `UserResource` — user management with counts: orders, DCA plans, active alerts
+- `PriceAlertResource` — all alerts across users, filterable by active/triggered/condition
+- `MarketOverviewWidget` — live market table, 5s poll, full-width
+- `ActiveAlertsWidget` — platform KPIs: active alerts, DCA plans, orders today, volume today
 
-### 6. Database Design
-`database/migrations/`
+### 9. Horizon Configuration
+`config/horizon.php`
 
-- `price_histories` — composite unique on `(asset_id, resolution, recorded_at)` for idempotent OHLCV upserts
-- Covering indexes on `orders` table: `(user_id, status, created_at)`, `(status, created_at)` for queue polling
-- `savings_plans` has `(status, next_execution_at)` — the scheduler query hits this index directly
-- `SoftDeletes` on orders/assets for audit trail without hard deletes
+Four named supervisors mapped to named queues:
+
+| Supervisor | Queue | Max Processes (prod) | Timeout |
+|---|---|---|---|
+| `supervisor-orders` | `orders` | 10 | 60s |
+| `supervisor-savings` | `savings-plans` | 5 | 90s |
+| `supervisor-notifications` | `notifications` | 8 | 60s |
+| `supervisor-default` | `default` | 5 | 60s |
+
+---
+
+## API Reference
+
+### Public
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/v1/assets` | List active assets (cached 5s) |
+| `GET` | `/api/v1/assets/{symbol}` | Single asset with live prices |
+| `GET` | `/api/v1/assets/{symbol}/candles` | OHLCV data (`?resolution=1m&from=&to=`) |
+| `GET` | `/api/v1/search/assets` | ElasticSearch (`?q=gold&currency=USD`) |
+
+### Authenticated (Sanctum)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/orders` | Place market order → 202 + queued |
+| `GET` | `/api/v1/orders` | Order history (cursor pagination) |
+| `DELETE` | `/api/v1/orders/{id}` | Cancel pending order |
+| `GET` | `/api/v1/portfolio` | Holdings + live P&L |
+| `POST` | `/api/v1/portfolio/refresh` | Force-refresh against live prices |
+| `GET` | `/api/v1/savings-plans` | List DCA plans |
+| `POST` | `/api/v1/savings-plans` | Create DCA plan |
+| `GET` | `/api/v1/savings-plans/{id}/projection` | DCA growth projection chart |
+| `DELETE` | `/api/v1/savings-plans/{id}` | Cancel plan |
+| `GET` | `/api/v1/price-alerts` | List user's alerts |
+| `POST` | `/api/v1/price-alerts` | Create alert (`above`/`below` + target) |
+| `DELETE` | `/api/v1/price-alerts/{id}` | Delete alert |
+| `GET` | `/api/v1/watchlist` | User's watchlist with live prices |
+| `POST` | `/api/v1/watchlist` | Add asset to watchlist |
+| `DELETE` | `/api/v1/watchlist/{asset}` | Remove from watchlist |
 
 ---
 
@@ -127,16 +194,16 @@ cd laravel-precious-metals-platform
 cp .env.example .env
 php artisan key:generate
 
-# 3. Spin up everything (MySQL, Redis, Elasticsearch, Reverb, Horizon, price simulator)
+# 3. Spin up (MySQL, Redis, Elasticsearch, Reverb, Horizon, price simulator)
 docker compose up -d
 
 # 4. Migrate + seed
 php artisan migrate --seed
 
-# 5. Start Horizon (queue dashboard at /horizon)
+# 5. Horizon queue dashboard at /horizon
 php artisan horizon
 
-# 6. Start the WebSocket server
+# 6. WebSocket server
 php artisan reverb:start
 
 # 7. Simulate live price feed (dev)
@@ -150,9 +217,10 @@ Open `http://localhost:8000/admin` for the Filament panel.
 ## Running Tests
 
 ```bash
-php artisan test                      # all tests
-php artisan test --filter OrderTest   # specific suite
-php artisan test --coverage           # with coverage
+php artisan test                                         # all tests
+php artisan test tests/Unit/Services/PriceServiceTest   # unit only
+php artisan test tests/Feature/Api/                     # feature only
+php artisan test --coverage                             # with coverage
 ```
 
 ---
@@ -162,14 +230,15 @@ php artisan test --coverage           # with coverage
 | Layer | Technology |
 |---|---|
 | Framework | Laravel 11, PHP 8.2 |
-| WebSocket | Laravel Reverb (self-hosted), Laravel Echo |
-| Queue | Redis + Laravel Horizon |
-| Cache | Redis (multi-TTL strategy) |
-| Search | ElasticSearch 8 (via `elastic/elasticsearch-php`) |
-| Admin | Filament 3 |
-| Database | MySQL 8 (covering indexes, composite uniques) |
-| Infrastructure | Docker Compose, GitHub Actions CI |
+| WebSocket | Laravel Reverb + Laravel Echo |
+| Queue + Dashboard | Redis + Laravel Horizon (4 named queues) |
+| Cache | Redis (6 TTL tiers) |
+| Search | ElasticSearch 8 (`elastic/elasticsearch-php`) |
+| Admin | Filament 3 (resources, widgets, live poll) |
+| Database | MySQL 8 (covering indexes, soft deletes, OHLCV upsert) |
 | Auth | Laravel Sanctum (SPA + API tokens) |
+| Notifications | Mail + database (queued) |
+| Infrastructure | Docker Compose, GitHub Actions CI |
 
 ---
 
@@ -177,34 +246,70 @@ php artisan test --coverage           # with coverage
 
 ```
 app/
-├── Console/Commands/
-│   ├── SimulatePriceFeed.php      # Dev price simulator (GBM)
-│   └── ScheduleSavingsPlans.php   # Cron dispatcher for DCA plans
+├── Console/
+│   ├── Kernel.php                     # Scheduler: DCA, alerts, market summary
+│   └── Commands/
+│       ├── SimulatePriceFeed.php      # Dev GBM price simulator
+│       └── ScheduleSavingsPlans.php   # DCA cron dispatcher
 ├── Events/
-│   ├── PriceUpdated.php           # Broadcasts to prices.{symbol} channel
-│   ├── OrderFulfilled.php         # Broadcasts to private user.{id}
-│   └── SavingsPlanExecuted.php
+│   ├── PriceUpdated.php               # prices.{symbol} — 30k subscribers
+│   ├── OrderFulfilled.php             # user.{id} — private
+│   ├── SavingsPlanExecuted.php        # user.{id} — private
+│   ├── PriceAlertFired.php            # user.{id} — private
+│   └── MarketSummaryUpdated.php       # market-summary — public
 ├── Filament/Resources/
-│   ├── AssetResource.php          # Live price admin (5s poll)
-│   ├── OrderResource.php          # Order book + stats widget
-│   └── SavingsPlanResource.php
+│   ├── AssetResource.php              # 5s poll, change% badges
+│   ├── OrderResource.php              # Order book + stats widget
+│   ├── SavingsPlanResource.php        # DCA management
+│   ├── UserResource.php               # User management + counts
+│   └── PriceAlertResource.php         # All alerts, filterable
+├── Filament/Widgets/
+│   ├── OrderStatsOverview.php         # Today's fills, volume, pending, failed
+│   ├── MarketOverviewWidget.php       # Live market table (5s poll, full-width)
+│   └── ActiveAlertsWidget.php         # Platform KPIs (30s poll)
 ├── Http/Controllers/Api/
-│   ├── AssetController.php        # GET /assets, /assets/{sym}/candles
-│   ├── OrderController.php        # POST /orders → 202 + queue
-│   └── SavingsPlanController.php  # CRUD + /projection endpoint
+│   ├── AssetController.php            # GET /assets, /candles
+│   ├── OrderController.php            # POST /orders → 202
+│   ├── SavingsPlanController.php      # DCA CRUD + /projection
+│   ├── PortfolioController.php        # Portfolio + P&L
+│   ├── PriceAlertController.php       # Alert CRUD
+│   ├── WatchlistController.php        # Watchlist CRUD
+│   └── SearchController.php           # ES search
+├── Http/Resources/
+│   ├── AssetResource.php
+│   ├── OrderResource.php
+│   ├── SavingsPlanResource.php
+│   ├── PortfolioResource.php
+│   ├── PriceAlertResource.php
+│   └── WatchlistResource.php
 ├── Jobs/
-│   ├── ProcessOrder.php           # ShouldBeUnique, 3 retries, atomic fill
-│   └── ExecuteSavingsPlan.php     # Unique per plan+date, DCA buy
+│   ├── ProcessOrder.php               # ShouldBeUnique, 3 retries, atomic fill
+│   ├── ExecuteSavingsPlan.php         # Unique per plan+date, DCA buy
+│   ├── CheckPriceAlerts.php           # Every minute, Redis price read
+│   └── BroadcastMarketSummary.php     # Every 30s, gainers/losers
 ├── Models/
-│   ├── Asset.php                  # XAU, XAG, XPT, XPD
-│   ├── Order.php
-│   ├── PriceHistory.php           # OHLCV candles
-│   ├── Portfolio.php
-│   └── SavingsPlan.php
+│   ├── Asset.php                      # XAU, XAG, XPT, XPD
+│   ├── Order.php                      # buy/sell, statuses
+│   ├── PriceHistory.php               # OHLCV candles
+│   ├── Portfolio.php                  # totals + P&L
+│   ├── PortfolioEntry.php             # per-asset: qty, cost basis, P&L
+│   ├── SavingsPlan.php                # DCA plans
+│   ├── PriceAlert.php                 # above/below threshold alerts
+│   └── Watchlist.php                  # user watchlisted assets
+├── Notifications/
+│   ├── OrderFulfilled.php             # mail + database
+│   ├── SavingsPlanExecuted.php        # mail + database
+│   └── PriceAlertTriggered.php        # mail + database
+├── Policies/
+│   ├── OrderPolicy.php                # ownership + isPending guard
+│   ├── SavingsPlanPolicy.php          # ownership + not-cancelled guard
+│   └── PriceAlertPolicy.php           # ownership guard
 └── Services/
-    ├── PriceService.php           # Tick ingestion, OHLCV upsert, Redis cache
-    ├── OrderService.php           # placeMarket(), fill() in transaction
-    └── SavingsPlanService.php     # execute(), projectDcaGrowth(), nextDate()
+    ├── PriceService.php               # Tick ingestion, OHLCV upsert, Redis cache
+    ├── OrderService.php               # placeMarket(), fill() in transaction
+    ├── SavingsPlanService.php         # execute(), projectDcaGrowth(), nextDate()
+    ├── PortfolioService.php           # applyOrder(), P&L, refreshPortfolio()
+    └── AssetSearchService.php         # ES index, search, updatePrice()
 ```
 
 ---
