@@ -1,0 +1,105 @@
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: local
+      APP_KEY: ${APP_KEY}
+      DB_HOST: mysql
+      REDIS_HOST: redis
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      REVERB_HOST: reverb
+      QUEUE_CONNECTION: redis
+    depends_on:
+      - mysql
+      - redis
+      - elasticsearch
+      - reverb
+    volumes:
+      - .:/var/www/html
+
+  # Queue workers — Horizon manages these in production
+  horizon:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: php artisan horizon
+    environment:
+      APP_ENV: local
+      DB_HOST: mysql
+      REDIS_HOST: redis
+      QUEUE_CONNECTION: redis
+    depends_on:
+      - mysql
+      - redis
+    volumes:
+      - .:/var/www/html
+
+  # Laravel Reverb WebSocket server (replaces Pusher in production)
+  reverb:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    ports:
+      - "8080:8080"
+    environment:
+      REVERB_HOST: 0.0.0.0
+      REVERB_PORT: 8080
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    depends_on:
+      - redis
+    volumes:
+      - .:/var/www/html
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: precious_metals
+      MYSQL_USER: app
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root_secret
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+
+  # Simulates a live precious metals price feed (dev only)
+  price-simulator:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    command: php artisan prices:simulate --interval=2
+    environment:
+      DB_HOST: mysql
+      REDIS_HOST: redis
+    depends_on:
+      - app
+    volumes:
+      - .:/var/www/html
+
+volumes:
+  mysql_data:
+  es_data:
