@@ -6,6 +6,22 @@ Built directly against Kettner's stack: **Laravel · Redis · WebSockets · Elas
 
 ---
 
+## Screenshots
+
+### Live Price Feed & Order Placement
+![Live Prices](screenshot-live-prices.svg)
+
+### Portfolio P&L Dashboard
+![Portfolio](screenshot-portfolio.svg)
+
+### DCA Savings Plans
+![Savings Plans](screenshot-savings-plans.svg)
+
+### Filament Admin Panel
+![Admin Panel](screenshot-admin.svg)
+
+---
+
 ## Architecture
 
 ```

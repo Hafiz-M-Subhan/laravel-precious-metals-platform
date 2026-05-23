@@ -1,0 +1,252 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 740" font-family="'Segoe UI', Arial, sans-serif">
+  <!-- Dark background -->
+  <rect width="1280" height="740" fill="#0f1117"/>
+
+  <!-- Top nav bar -->
+  <rect width="1280" height="56" fill="#161b27"/>
+  <circle cx="32" cy="28" r="12" fill="#f59e0b"/>
+  <text x="52" y="33" fill="white" font-size="16" font-weight="700">PreciousMetals</text>
+  <text x="52" y="33" fill="#f59e0b" font-size="16" font-weight="700">P</text>
+  <text x="62" y="33" fill="white" font-size="16" font-weight="700">reciousMetals</text>
+
+  <!-- Nav links -->
+  <text x="260" y="33" fill="#94a3b8" font-size="13">Markets</text>
+  <text x="330" y="33" fill="white" font-size="13" font-weight="600">Live Prices</text>
+  <rect x="326" y="48" width="68" height="2" fill="#f59e0b" rx="1"/>
+  <text x="410" y="33" fill="#94a3b8" font-size="13">Portfolio</text>
+  <text x="474" y="33" fill="#94a3b8" font-size="13">Orders</text>
+  <text x="530" y="33" fill="#94a3b8" font-size="13">Savings Plans</text>
+  <text x="630" y="33" fill="#94a3b8" font-size="13">Alerts</text>
+
+  <!-- WebSocket indicator -->
+  <circle cx="1160" cy="28" r="6" fill="#22c55e"/>
+  <text x="1172" y="33" fill="#22c55e" font-size="12" font-weight="600">LIVE</text>
+  <!-- Pulsing ring animation hint -->
+  <circle cx="1160" cy="28" r="10" fill="none" stroke="#22c55e" stroke-width="1" opacity="0.4"/>
+
+  <!-- Reverb WebSocket badge -->
+  <rect x="1040" y="18" width="108" height="20" fill="#1e3a2f" rx="10"/>
+  <text x="1056" y="32" fill="#22c55e" font-size="10">⚡ Reverb connected</text>
+
+  <!-- Page title -->
+  <text x="48" y="96" fill="white" font-size="22" font-weight="700">Live Precious Metals Prices</text>
+  <text x="48" y="116" fill="#64748b" font-size="12">Broadcasting via Laravel Reverb WebSocket · Updates every ~2 seconds · 30,000+ concurrent subscribers</text>
+
+  <!-- XAU Card -->
+  <rect x="48" y="136" width="282" height="160" fill="#161b27" rx="12" stroke="#f59e0b" stroke-width="1"/>
+  <!-- Gold badge -->
+  <rect x="64" y="152" width="44" height="22" fill="#f59e0b22" rx="11"/>
+  <text x="74" y="167" fill="#f59e0b" font-size="11" font-weight="700">XAU</text>
+  <text x="186" y="166" fill="#64748b" font-size="10">Gold / Troy oz</text>
+  <!-- Price -->
+  <text x="64" y="205" fill="white" font-size="34" font-weight="700">$2,318.40</text>
+  <!-- Change badge -->
+  <rect x="64" y="218" width="90" height="22" fill="#14532d" rx="11"/>
+  <text x="76" y="233" fill="#22c55e" font-size="12" font-weight="600">▲ +12.80  +0.56%</text>
+  <!-- Bid / Ask -->
+  <text x="64" y="272" fill="#64748b" font-size="11">Bid</text>
+  <text x="94" y="272" fill="#94a3b8" font-size="12" font-weight="500">$2,318.10</text>
+  <text x="178" y="272" fill="#64748b" font-size="11">Ask</text>
+  <text x="206" y="272" fill="#94a3b8" font-size="12" font-weight="500">$2,318.70</text>
+  <!-- Mini sparkline -->
+  <polyline points="64,290 90,286 116,289 142,282 168,279 194,275 220,273 246,270 272,268" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- XAG Card -->
+  <rect x="350" y="136" width="282" height="160" fill="#161b27" rx="12" stroke="#64748b" stroke-width="1"/>
+  <rect x="366" y="152" width="42" height="22" fill="#64748b22" rx="11"/>
+  <text x="375" y="167" fill="#94a3b8" font-size="11" font-weight="700">XAG</text>
+  <text x="484" y="166" fill="#64748b" font-size="10">Silver / Troy oz</text>
+  <text x="366" y="205" fill="white" font-size="34" font-weight="700">$29.84</text>
+  <rect x="366" y="218" width="90" height="22" fill="#14532d" rx="11"/>
+  <text x="378" y="233" fill="#22c55e" font-size="12" font-weight="600">▲ +0.34  +1.15%</text>
+  <text x="366" y="272" fill="#64748b" font-size="11">Bid</text>
+  <text x="396" y="272" fill="#94a3b8" font-size="12" font-weight="500">$29.82</text>
+  <text x="460" y="272" fill="#64748b" font-size="11">Ask</text>
+  <text x="488" y="272" fill="#94a3b8" font-size="12" font-weight="500">$29.86</text>
+  <polyline points="366,292 392,289 418,293 444,288 470,284 496,281 522,286 548,283 574,279" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- XPT Card -->
+  <rect x="652" y="136" width="282" height="160" fill="#161b27" rx="12" stroke="#6366f1" stroke-width="1"/>
+  <rect x="668" y="152" width="40" height="22" fill="#6366f122" rx="11"/>
+  <text x="676" y="167" fill="#818cf8" font-size="11" font-weight="700">XPT</text>
+  <text x="780" y="166" fill="#64748b" font-size="10">Platinum / Troy oz</text>
+  <text x="668" y="205" fill="white" font-size="34" font-weight="700">$988.20</text>
+  <rect x="668" y="218" width="90" height="22" fill="#4c0519" rx="11"/>
+  <text x="680" y="233" fill="#f87171" font-size="12" font-weight="600">▼ −5.60  −0.56%</text>
+  <text x="668" y="272" fill="#64748b" font-size="11">Bid</text>
+  <text x="698" y="272" fill="#94a3b8" font-size="12" font-weight="500">$987.90</text>
+  <text x="766" y="272" fill="#64748b" font-size="11">Ask</text>
+  <text x="794" y="272" fill="#94a3b8" font-size="12" font-weight="500">$988.50</text>
+  <polyline points="668,280 694,282 720,285 746,289 772,287 798,291 824,288 850,293 876,295" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- XPD Card -->
+  <rect x="954" y="136" width="282" height="160" fill="#161b27" rx="12" stroke="#ec4899" stroke-width="1"/>
+  <rect x="970" y="152" width="44" height="22" fill="#ec489922" rx="11"/>
+  <text x="978" y="167" fill="#f472b6" font-size="11" font-weight="700">XPD</text>
+  <text x="1082" y="166" fill="#64748b" font-size="10">Palladium / Troy oz</text>
+  <text x="970" y="205" fill="white" font-size="34" font-weight="700">$1,042.60</text>
+  <rect x="970" y="218" width="84" height="22" fill="#14532d" rx="11"/>
+  <text x="982" y="233" fill="#22c55e" font-size="12" font-weight="600">▲ +8.40  +0.81%</text>
+  <text x="970" y="272" fill="#64748b" font-size="11">Bid</text>
+  <text x="1000" y="272" fill="#94a3b8" font-size="12" font-weight="500">$1,042.20</text>
+  <text x="1080" y="272" fill="#64748b" font-size="11">Ask</text>
+  <text x="1108" y="272" fill="#94a3b8" font-size="12" font-weight="500">$1,043.00</text>
+  <polyline points="970,286 996,283 1022,280 1048,276 1074,274 1100,271 1126,268 1152,265 1178,262" fill="none" stroke="#ec4899" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- XAU/USD Chart Panel -->
+  <rect x="48" y="320" width="760" height="380" fill="#161b27" rx="12"/>
+  <text x="72" y="352" fill="white" font-size="15" font-weight="600">XAU/USD — 1h Candle Chart</text>
+  <text x="72" y="370" fill="#64748b" font-size="11">OHLCV · Cached 60s · TradingView compatible</text>
+
+  <!-- Resolution tabs -->
+  <rect x="580" y="340" width="34" height="22" fill="#1e293b" rx="5"/>
+  <text x="590" y="356" fill="#94a3b8" font-size="11">1m</text>
+  <rect x="618" y="340" width="34" height="22" fill="#1e293b" rx="5"/>
+  <text x="628" y="356" fill="#94a3b8" font-size="11">5m</text>
+  <rect x="656" y="340" width="34" height="22" fill="#f59e0b22" rx="5"/>
+  <text x="666" y="356" fill="#f59e0b" font-size="11">1h</text>
+  <rect x="694" y="340" width="34" height="22" fill="#1e293b" rx="5"/>
+  <text x="704" y="356" fill="#94a3b8" font-size="11">1d</text>
+
+  <!-- Chart grid lines -->
+  <line x1="72" y1="550" x2="780" y2="550" stroke="#1e293b" stroke-width="1"/>
+  <line x1="72" y1="500" x2="780" y2="500" stroke="#1e293b" stroke-width="1"/>
+  <line x1="72" y1="450" x2="780" y2="450" stroke="#1e293b" stroke-width="1"/>
+  <line x1="72" y1="400" x2="780" y2="400" stroke="#1e293b" stroke-width="1"/>
+  <!-- Y-axis labels -->
+  <text x="56" y="553" fill="#475569" font-size="10">2290</text>
+  <text x="56" y="503" fill="#475569" font-size="10">2300</text>
+  <text x="56" y="453" fill="#475569" font-size="10">2310</text>
+  <text x="56" y="403" fill="#475569" font-size="10">2320</text>
+
+  <!-- Candlesticks — green candles -->
+  <rect x="100" y="510" width="14" height="35" fill="#22c55e" rx="1"/>
+  <line x1="107" y1="505" x2="107" y2="510" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="107" y1="545" x2="107" y2="552" stroke="#22c55e" stroke-width="1.5"/>
+
+  <rect x="125" y="505" width="14" height="30" fill="#22c55e" rx="1"/>
+  <line x1="132" y1="500" x2="132" y2="505" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="132" y1="535" x2="132" y2="542" stroke="#22c55e" stroke-width="1.5"/>
+
+  <rect x="150" y="498" width="14" height="25" fill="#f87171" rx="1"/>
+  <line x1="157" y1="493" x2="157" y2="498" stroke="#f87171" stroke-width="1.5"/>
+  <line x1="157" y1="523" x2="157" y2="530" stroke="#f87171" stroke-width="1.5"/>
+
+  <rect x="175" y="502" width="14" height="20" fill="#22c55e" rx="1"/>
+  <line x1="182" y1="498" x2="182" y2="502" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="182" y1="522" x2="182" y2="528" stroke="#22c55e" stroke-width="1.5"/>
+
+  <rect x="200" y="496" width="14" height="22" fill="#22c55e" rx="1"/>
+  <line x1="207" y1="490" x2="207" y2="496" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="207" y1="518" x2="207" y2="524" stroke="#22c55e" stroke-width="1.5"/>
+
+  <rect x="225" y="488" width="14" height="28" fill="#f87171" rx="1"/>
+  <line x1="232" y1="483" x2="232" y2="488" stroke="#f87171" stroke-width="1.5"/>
+  <line x1="232" y1="516" x2="232" y2="522" stroke="#f87171" stroke-width="1.5"/>
+
+  <rect x="250" y="484" width="14" height="20" fill="#22c55e" rx="1"/>
+  <line x1="257" y1="480" x2="257" y2="484" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="257" y1="504" x2="257" y2="510" stroke="#22c55e" stroke-width="1.5"/>
+
+  <rect x="275" y="476" width="14" height="24" fill="#22c55e" rx="1"/>
+  <line x1="282" y1="471" x2="282" y2="476" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="282" y1="500" x2="282" y2="507" stroke="#22c55e" stroke-width="1.5"/>
+
+  <rect x="300" y="470" width="14" height="18" fill="#f87171" rx="1"/>
+  <line x1="307" y1="466" x2="307" y2="470" stroke="#f87171" stroke-width="1.5"/>
+  <line x1="307" y1="488" x2="307" y2="494" stroke="#f87171" stroke-width="1.5"/>
+
+  <rect x="325" y="462" width="14" height="22" fill="#22c55e" rx="1"/>
+  <line x1="332" y1="458" x2="332" y2="462" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="332" y1="484" x2="332" y2="490" stroke="#22c55e" stroke-width="1.5"/>
+
+  <rect x="350" y="455" width="14" height="20" fill="#22c55e" rx="1"/>
+  <line x1="357" y1="450" x2="357" y2="455" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="357" y1="475" x2="357" y2="481" stroke="#22c55e" stroke-width="1.5"/>
+
+  <rect x="375" y="448" width="14" height="24" fill="#f87171" rx="1"/>
+  <line x1="382" y1="443" x2="382" y2="448" stroke="#f87171" stroke-width="1.5"/>
+  <line x1="382" y1="472" x2="382" y2="478" stroke="#f87171" stroke-width="1.5"/>
+
+  <rect x="400" y="443" width="14" height="18" fill="#22c55e" rx="1"/>
+  <line x1="407" y1="439" x2="407" y2="443" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="407" y1="461" x2="407" y2="467" stroke="#22c55e" stroke-width="1.5"/>
+
+  <rect x="425" y="438" width="14" height="20" fill="#22c55e" rx="1"/>
+  <rect x="450" y="432" width="14" height="22" fill="#f87171" rx="1"/>
+  <rect x="475" y="426" width="14" height="20" fill="#22c55e" rx="1"/>
+  <rect x="500" y="420" width="14" height="18" fill="#22c55e" rx="1"/>
+  <rect x="525" y="415" width="14" height="20" fill="#22c55e" rx="1"/>
+  <rect x="550" y="410" width="14" height="18" fill="#f87171" rx="1"/>
+  <rect x="575" y="406" width="14" height="16" fill="#22c55e" rx="1"/>
+  <!-- Current candle (forming) -->
+  <rect x="600" y="400" width="14" height="14" fill="#f59e0b" rx="1" opacity="0.9"/>
+  <line x1="607" y1="396" x2="607" y2="400" stroke="#f59e0b" stroke-width="1.5"/>
+  <line x1="607" y1="414" x2="607" y2="418" stroke="#f59e0b" stroke-width="1.5"/>
+
+  <!-- X-axis labels -->
+  <text x="100" y="590" fill="#475569" font-size="10">09:00</text>
+  <text x="200" y="590" fill="#475569" font-size="10">11:00</text>
+  <text x="300" y="590" fill="#475569" font-size="10">13:00</text>
+  <text x="400" y="590" fill="#475569" font-size="10">15:00</text>
+  <text x="500" y="590" fill="#475569" font-size="10">17:00</text>
+  <text x="600" y="590" fill="#f59e0b" font-size="10">19:00 ●</text>
+
+  <!-- Current price line -->
+  <line x1="72" y1="402" x2="780" y2="402" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"/>
+  <rect x="733" y="394" width="54" height="16" fill="#f59e0b" rx="4"/>
+  <text x="738" y="406" fill="#0f1117" font-size="10" font-weight="700">$2,318.40</text>
+
+  <!-- Volume bars -->
+  <rect x="100" y="620" width="14" height="20" fill="#22c55e" rx="1" opacity="0.4"/>
+  <rect x="125" y="615" width="14" height="25" fill="#22c55e" rx="1" opacity="0.4"/>
+  <rect x="150" y="618" width="14" height="22" fill="#f87171" rx="1" opacity="0.4"/>
+  <rect x="175" y="622" width="14" height="18" fill="#22c55e" rx="1" opacity="0.4"/>
+  <rect x="200" y="616" width="14" height="24" fill="#22c55e" rx="1" opacity="0.4"/>
+  <rect x="225" y="610" width="14" height="30" fill="#f87171" rx="1" opacity="0.4"/>
+  <rect x="250" y="618" width="14" height="22" fill="#22c55e" rx="1" opacity="0.4"/>
+  <rect x="275" y="612" width="14" height="28" fill="#22c55e" rx="1" opacity="0.4"/>
+  <text x="72" y="650" fill="#475569" font-size="10">Volume</text>
+
+  <!-- Order form panel -->
+  <rect x="828" y="320" width="408" height="380" fill="#161b27" rx="12"/>
+  <text x="852" y="352" fill="white" font-size="15" font-weight="600">Place Market Order</text>
+
+  <!-- Buy/Sell toggle -->
+  <rect x="852" y="366" width="360" height="38" fill="#0f1117" rx="8"/>
+  <rect x="854" y="368" width="178" height="34" fill="#16a34a" rx="6"/>
+  <text x="924" y="390" fill="white" font-size="14" font-weight="700">BUY</text>
+  <text x="1054" y="390" fill="#64748b" font-size="14" font-weight="600">SELL</text>
+
+  <!-- Asset select -->
+  <text x="852" y="426" fill="#64748b" font-size="11" font-weight="600">ASSET</text>
+  <rect x="852" y="434" width="360" height="36" fill="#0f1117" rx="8" stroke="#334155" stroke-width="1"/>
+  <circle cx="872" cy="452" r="10" fill="#f59e0b22"/>
+  <text x="867" y="456" fill="#f59e0b" font-size="10" font-weight="700">Au</text>
+  <text x="892" y="456" fill="white" font-size="13">Gold (XAU)</text>
+  <text x="1168" y="456" fill="#64748b" font-size="12">▾</text>
+
+  <!-- Quantity -->
+  <text x="852" y="490" fill="#64748b" font-size="11" font-weight="600">QUANTITY (oz)</text>
+  <rect x="852" y="498" width="360" height="36" fill="#0f1117" rx="8" stroke="#334155" stroke-width="1"/>
+  <text x="872" y="521" fill="white" font-size="14">0.500</text>
+  <text x="1150" y="521" fill="#64748b" font-size="11">troy oz</text>
+
+  <!-- Price info -->
+  <rect x="852" y="546" width="360" height="56" fill="#0f1117" rx="8"/>
+  <text x="872" y="566" fill="#64748b" font-size="11">Ask Price</text>
+  <text x="1060" y="566" fill="white" font-size="12" font-weight="600">$2,318.70</text>
+  <text x="872" y="590" fill="#64748b" font-size="11">Est. Total</text>
+  <text x="1040" y="590" fill="#f59e0b" font-size="14" font-weight="700">$1,159.35</text>
+
+  <!-- Sanctum notice -->
+  <text x="852" y="620" fill="#475569" font-size="10">Auth: Sanctum · Orders return 202 · Filled async via Horizon</text>
+
+  <!-- Place button -->
+  <rect x="852" y="628" width="360" height="44" fill="#16a34a" rx="8"/>
+  <text x="990" y="655" fill="white" font-size="15" font-weight="700">Place Buy Order</text>
+
+  <!-- Footer info -->
+  <text x="48" y="718" fill="#334155" font-size="11">Channels: prices.XAU · prices.XAG · prices.XPT · prices.XPD · market-summary · user.{id}</text>
+  <text x="900" y="718" fill="#334155" font-size="11">Laravel Reverb · Redis pub/sub · Horizon queue</text>
+</svg>

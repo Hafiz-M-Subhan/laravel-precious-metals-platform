@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 740" font-family="'Segoe UI', Arial, sans-serif">
+  <!-- Background -->
+  <rect width="1280" height="740" fill="#0f1117"/>
+
+  <!-- Top nav -->
+  <rect width="1280" height="56" fill="#161b27"/>
+  <circle cx="32" cy="28" r="12" fill="#f59e0b"/>
+  <text x="52" y="33" fill="#f59e0b" font-size="16" font-weight="700">P</text>
+  <text x="62" y="33" fill="white" font-size="16" font-weight="700">reciousMetals</text>
+  <text x="260" y="33" fill="#94a3b8" font-size="13">Markets</text>
+  <text x="330" y="33" fill="#94a3b8" font-size="13">Live Prices</text>
+  <text x="400" y="33" fill="#94a3b8" font-size="13">Portfolio</text>
+  <text x="474" y="33" fill="#94a3b8" font-size="13">Orders</text>
+  <text x="530" y="33" fill="white" font-size="13" font-weight="600">Savings Plans</text>
+  <rect x="526" y="48" width="94" height="2" fill="#f59e0b" rx="1"/>
+  <text x="630" y="33" fill="#94a3b8" font-size="13">Alerts</text>
+  <circle cx="1160" cy="28" r="6" fill="#22c55e"/>
+  <text x="1172" y="33" fill="#22c55e" font-size="12" font-weight="600">LIVE</text>
+
+  <text x="48" y="96" fill="white" font-size="22" font-weight="700">DCA Savings Plans</text>
+  <text x="48" y="116" fill="#64748b" font-size="12">Dollar Cost Averaging — automated recurring buys · ExecuteSavingsPlan job · unique per plan+date</text>
+
+  <!-- Stats row -->
+  <rect x="48" y="136" width="190" height="80" fill="#161b27" rx="10" stroke="#1e293b" stroke-width="1"/>
+  <text x="68" y="160" fill="#64748b" font-size="11">Active Plans</text>
+  <text x="68" y="198" fill="white" font-size="28" font-weight="700">3</text>
+
+  <rect x="254" y="136" width="220" height="80" fill="#161b27" rx="10" stroke="#1e293b" stroke-width="1"/>
+  <text x="274" y="160" fill="#64748b" font-size="11">Total Invested (All Plans)</text>
+  <text x="274" y="198" fill="white" font-size="28" font-weight="700">$7,200.00</text>
+
+  <rect x="490" y="136" width="220" height="80" fill="#161b27" rx="10" stroke="#14532d" stroke-width="1"/>
+  <text x="510" y="160" fill="#64748b" font-size="11">Unrealized Gain</text>
+  <text x="510" y="198" fill="#22c55e" font-size="28" font-weight="700">+$486.20</text>
+
+  <rect x="726" y="136" width="220" height="80" fill="#161b27" rx="10" stroke="#1e293b" stroke-width="1"/>
+  <text x="746" y="160" fill="#64748b" font-size="11">Next Execution</text>
+  <text x="746" y="192" fill="white" font-size="20" font-weight="700">01 Jun 2025</text>
+  <text x="746" y="208" fill="#f59e0b" font-size="11">in 9 days · XAU monthly</text>
+
+  <!-- Plan cards -->
+  <!-- Card 1: XAU Monthly -->
+  <rect x="48" y="240" width="370" height="290" fill="#161b27" rx="12" stroke="#f59e0b" stroke-width="1"/>
+  <!-- Header -->
+  <rect x="48" y="240" width="370" height="50" fill="#f59e0b1a" rx="12"/>
+  <rect x="48" y="268" width="370" height="22" fill="#f59e0b1a"/>
+  <circle cx="76" cy="265" r="16" fill="#f59e0b33"/>
+  <text x="68" y="270" fill="#f59e0b" font-size="13" font-weight="700">XAU</text>
+  <text x="100" y="263" fill="white" font-size="14" font-weight="600">Gold Monthly DCA</text>
+  <text x="100" y="278" fill="#94a3b8" font-size="11">Monthly · Day 1</text>
+  <rect x="336" y="250" width="64" height="22" fill="#14532d" rx="11"/>
+  <text x="350" y="265" fill="#22c55e" font-size="11" font-weight="600">Active</text>
+
+  <text x="72" y="318" fill="#64748b" font-size="11">Investment/cycle</text>
+  <text x="310" y="318" fill="white" font-size="13" font-weight="600">$500.00</text>
+  <text x="72" y="342" fill="#64748b" font-size="11">Total invested</text>
+  <text x="310" y="342" fill="white" font-size="13">$3,000.00</text>
+  <text x="72" y="366" fill="#64748b" font-size="11">Avg cost basis</text>
+  <text x="310" y="366" fill="white" font-size="13">$2,248.60</text>
+  <text x="72" y="390" fill="#64748b" font-size="11">Total quantity</text>
+  <text x="310" y="390" fill="white" font-size="13">1.3341 oz</text>
+  <text x="72" y="414" fill="#64748b" font-size="11">Unrealized P&amp;L</text>
+  <text x="310" y="414" fill="#22c55e" font-size="13" font-weight="600">+$92.80  +3.09%</text>
+  <text x="72" y="438" fill="#64748b" font-size="11">Next execution</text>
+  <text x="310" y="438" fill="#f59e0b" font-size="12">01 Jun 2025</text>
+
+  <!-- Projection chart mini -->
+  <text x="72" y="462" fill="#64748b" font-size="11">12-month projection (5% annual growth)</text>
+  <polyline points="72,500 102,496 132,491 162,485 192,479 222,472 252,466 282,459 312,452 342,445 372,438 402,430" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+  <polyline points="72,500 402,500" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Card 2: XAG Biweekly -->
+  <rect x="438" y="240" width="370" height="290" fill="#161b27" rx="12" stroke="#94a3b8" stroke-width="1"/>
+  <rect x="438" y="240" width="370" height="50" fill="#94a3b81a" rx="12"/>
+  <rect x="438" y="268" width="370" height="22" fill="#94a3b81a"/>
+  <circle cx="466" cy="265" r="16" fill="#94a3b833"/>
+  <text x="458" y="270" fill="#94a3b8" font-size="13" font-weight="700">XAG</text>
+  <text x="490" y="263" fill="white" font-size="14" font-weight="600">Silver Biweekly DCA</text>
+  <text x="490" y="278" fill="#94a3b8" font-size="11">Every 2 weeks</text>
+  <rect x="726" y="250" width="64" height="22" fill="#14532d" rx="11"/>
+  <text x="740" y="265" fill="#22c55e" font-size="11" font-weight="600">Active</text>
+
+  <text x="462" y="318" fill="#64748b" font-size="11">Investment/cycle</text>
+  <text x="700" y="318" fill="white" font-size="13" font-weight="600">$200.00</text>
+  <text x="462" y="342" fill="#64748b" font-size="11">Total invested</text>
+  <text x="700" y="342" fill="white" font-size="13">$2,400.00</text>
+  <text x="462" y="366" fill="#64748b" font-size="11">Avg cost basis</text>
+  <text x="700" y="366" fill="white" font-size="13">$27.82</text>
+  <text x="462" y="390" fill="#64748b" font-size="11">Total quantity</text>
+  <text x="700" y="390" fill="white" font-size="13">86.2718 oz</text>
+  <text x="462" y="414" fill="#64748b" font-size="11">Unrealized P&amp;L</text>
+  <text x="700" y="414" fill="#22c55e" font-size="13" font-weight="600">+$175.40  +7.31%</text>
+  <text x="462" y="438" fill="#64748b" font-size="11">Next execution</text>
+  <text x="700" y="438" fill="#94a3b8" font-size="12">24 May 2025</text>
+
+  <text x="462" y="462" fill="#64748b" font-size="11">12-month projection (5% annual growth)</text>
+  <polyline points="462,500 492,496 522,492 552,487 582,482 612,476 642,470 672,463 702,456 732,449 762,441 792,433" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+  <polyline points="462,500 792,500" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- Card 3: XPT Weekly (Paused) -->
+  <rect x="828" y="240" width="370" height="290" fill="#161b27" rx="12" stroke="#334155" stroke-width="1"/>
+  <rect x="828" y="240" width="370" height="50" fill="#1e293b" rx="12"/>
+  <rect x="828" y="268" width="370" height="22" fill="#1e293b"/>
+  <circle cx="856" cy="265" r="16" fill="#6366f133"/>
+  <text x="848" y="270" fill="#818cf8" font-size="13" font-weight="700">XPT</text>
+  <text x="880" y="263" fill="white" font-size="14" font-weight="600">Platinum Weekly DCA</text>
+  <text x="880" y="278" fill="#94a3b8" font-size="11">Weekly</text>
+  <rect x="1118" y="250" width="60" height="22" fill="#78350f33" rx="11"/>
+  <text x="1132" y="265" fill="#f59e0b" font-size="11" font-weight="600">Paused</text>
+
+  <text x="852" y="318" fill="#64748b" font-size="11">Investment/cycle</text>
+  <text x="1090" y="318" fill="#94a3b8" font-size="13">$180.00</text>
+  <text x="852" y="342" fill="#64748b" font-size="11">Total invested</text>
+  <text x="1090" y="342" fill="#94a3b8" font-size="13">$1,800.00</text>
+  <text x="852" y="366" fill="#64748b" font-size="11">Avg cost basis</text>
+  <text x="1090" y="366" fill="#94a3b8" font-size="13">$1,008.20</text>
+  <text x="852" y="390" fill="#64748b" font-size="11">Total quantity</text>
+  <text x="1090" y="390" fill="#94a3b8" font-size="13">1.7853 oz</text>
+  <text x="852" y="414" fill="#64748b" font-size="11">Unrealized P&amp;L</text>
+  <text x="1090" y="414" fill="#f87171" font-size="13">−$35.60  −1.98%</text>
+  <text x="852" y="438" fill="#64748b" font-size="11">Next execution</text>
+  <text x="1090" y="438" fill="#475569" font-size="12">Paused</text>
+
+  <text x="852" y="462" fill="#64748b" font-size="11">12-month projection (5% annual growth)</text>
+  <polyline points="852,500 882,498 912,495 942,492 972,489 1002,486 1032,482 1062,478 1092,474 1122,469 1152,463 1182,457" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round"/>
+  <polyline points="852,500 1182,500" stroke="#1e293b" stroke-width="1"/>
+
+  <!-- DCA info bar -->
+  <rect x="48" y="554" width="1182" height="56" fill="#161b27" rx="10"/>
+  <text x="72" y="576" fill="#475569" font-size="11">⚙  Scheduler: savings-plans:schedule runs everyMinute · chunkById(200) · ExecuteSavingsPlan dispatched to savings-plans queue</text>
+  <text x="72" y="596" fill="#475569" font-size="11">🔒  ShouldBeUnique key: savings_plan_{id}_{YYYY-MM-DD} — prevents double-execution on retry · 3 tries, backoff [10s, 60s, 300s]</text>
+
+  <!-- New plan form -->
+  <rect x="48" y="628" width="1182" height="88" fill="#161b27" rx="10" stroke="#1e293b" stroke-width="1"/>
+  <text x="72" y="650" fill="white" font-size="14" font-weight="600">Create New Savings Plan</text>
+  <!-- Fields -->
+  <rect x="72" y="660" width="180" height="32" fill="#0f1117" rx="6" stroke="#334155" stroke-width="1"/>
+  <text x="92" y="681" fill="#94a3b8" font-size="12">Asset  ▾</text>
+  <rect x="268" y="660" width="180" height="32" fill="#0f1117" rx="6" stroke="#334155" stroke-width="1"/>
+  <text x="288" y="681" fill="#94a3b8" font-size="12">$amount/cycle</text>
+  <rect x="464" y="660" width="180" height="32" fill="#0f1117" rx="6" stroke="#334155" stroke-width="1"/>
+  <text x="484" y="681" fill="#94a3b8" font-size="12">Frequency  ▾</text>
+  <rect x="660" y="660" width="180" height="32" fill="#0f1117" rx="6" stroke="#334155" stroke-width="1"/>
+  <text x="680" y="681" fill="#94a3b8" font-size="12">Day of month</text>
+  <rect x="1090" y="658" width="120" height="36" fill="#16a34a" rx="8"/>
+  <text x="1115" y="681" fill="white" font-size="13" font-weight="700">Create Plan</text>
+
+  <text x="48" y="726" fill="#334155" font-size="11">POST /api/v1/savings-plans · GET /api/v1/savings-plans/{id}/projection?months=12&amp;annual_growth=0.05 · SavingsPlanService::projectDcaGrowth()</text>
+</svg>
